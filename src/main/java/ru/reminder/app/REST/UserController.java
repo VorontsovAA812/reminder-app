@@ -1,5 +1,6 @@
 package ru.reminder.app.REST;
 
+import ru.reminder.app.REST.DTO.UserDto;
 import ru.reminder.app.model.User;
 import ru.reminder.app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,14 @@ public class UserController {
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @PostMapping
+    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
+
+        User user = new User(userDto.getUserName(), userDto.getPassword());
+        userService.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("User created successfully");
     }
 }
