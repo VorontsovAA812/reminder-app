@@ -1,5 +1,6 @@
 package ru.reminder.app.service;
 
+import ru.reminder.app.REST.DTO.UserDto;
 import ru.reminder.app.exception.BusinessException;
 import ru.reminder.app.model.User;
 import ru.reminder.app.repository.UserRepository;
@@ -27,7 +28,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public Long createUser(UserDto userDto) {
+        User user = new User(userDto.getUserName(), userDto.getPassword());
+       return  userRepository.save(user).getId();
     }
 }
