@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import ru.reminder.app.REST.DTO.ReminderDto;
 import ru.reminder.app.REST.DTO.ReminderResponse;
@@ -31,4 +34,16 @@ public class ReminderController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reminderResponse);
     }
+
+    @GetMapping("/{id}")
+    public ReminderResponse getReminderById(@PathVariable Long id) {
+        return reminderService.getReminderById(id);
+    }
+
+    @DeleteMapping(("/{id}"))
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        reminderService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
