@@ -32,4 +32,9 @@ public class UserService {
         User user = new User(userDto.getUserName(), userDto.getPassword());
        return  userRepository.save(user).getId();
     }
+
+    public void  deleteById(Long id) {
+       User user =  getUserById(id);
+       userRepository.delete(user);
+    }
 }

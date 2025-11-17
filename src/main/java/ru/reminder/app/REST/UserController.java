@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
@@ -40,5 +41,11 @@ public class UserController {
         Long id =userService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(id);
+    }
+
+    @DeleteMapping(("/{id}"))
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
