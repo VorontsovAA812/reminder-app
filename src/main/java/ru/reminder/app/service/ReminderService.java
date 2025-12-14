@@ -22,11 +22,10 @@ public class ReminderService {
 
     public ReminderResponse createReminder(ReminderDto reminderDto) {
 
-        // собираем объект напоминания
+
         Reminder reminder = new Reminder(reminderDto.getTitle(), reminderDto.getDescription(),reminderDto.getRemind());
         reminder.setUser(userService.getUserById(reminderDto.getUserId())); // временно, пока не добавлена ауентификация
 
-        // собираем ответ
         return new ReminderResponse(reminderRepository.save(reminder).getId(),
                                                             reminder.getTitle(),
                                                             reminder.getDescription(),
