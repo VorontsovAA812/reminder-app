@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND,
+        return userRepository.findById(id).orElseThrow( BusinessException.of(HttpStatus.NOT_FOUND,
                 "User with id " + id + " not found"
         ));
     }

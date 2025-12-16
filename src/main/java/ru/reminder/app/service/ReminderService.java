@@ -35,10 +35,9 @@ public class ReminderService {
 
     public ReminderResponse getReminderById(Long id) {
         Reminder reminder = reminderRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(
+                .orElseThrow( BusinessException.of(
                         HttpStatus.NOT_FOUND,
-                        "Reminder with id " + id + " not found"
-                ));
+                        "Reminder with id " + id + " not found"));
 
         return new ReminderResponse(
                 reminder.getId(),
