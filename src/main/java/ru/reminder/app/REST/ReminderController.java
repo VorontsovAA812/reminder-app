@@ -3,14 +3,8 @@ package ru.reminder.app.REST;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-
+import org.springframework.web.bind.annotation.*;
+import ru.reminder.app.REST.DTO.PagingResult;
 import ru.reminder.app.REST.DTO.ReminderDto;
 import ru.reminder.app.REST.DTO.ReminderResponse;
 import ru.reminder.app.service.ReminderService;
@@ -44,6 +38,16 @@ public class ReminderController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         reminderService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/list")
+    public PagingResult<ReminderDto> findAllReminders(
+
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "2") Integer size,
+            @RequestParam(defaultValue = "1") Long userId) // ← ВРЕМЕННО! пока не добавлена ауентификация
+    {
+        return reminderService.findAll(page,size,userId);
     }
 
 }

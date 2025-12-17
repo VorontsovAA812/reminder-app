@@ -23,7 +23,6 @@ public class UserService {
                 "User with id " + id + " not found"
         ));
     }
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
