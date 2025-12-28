@@ -1,5 +1,6 @@
 package ru.reminder.app.service;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import ru.reminder.app.REST.DTO.ReminderResponse;
 import ru.reminder.app.exception.BusinessException;
 import ru.reminder.app.model.Reminder;
 import ru.reminder.app.repository.ReminderRepository;
-import ru.reminder.app.util.PaginationUtils;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class ReminderService {
 
 
     public PagingResult<ReminderDto> findAll(Integer page, Integer size, Long userId) {
-        final Pageable pageable = PaginationUtils.getPageable(page-1,size);
+        final Pageable pageable = PageRequest.of(page-1,size);
         final Page<Reminder> entities = reminderRepository.findByUserId(userId,pageable);
         final List<ReminderDto> entitiesDto = entities.stream()
                                 .map(entity ->{
@@ -76,10 +77,7 @@ public class ReminderService {
         return new PagingResult<>(
                 entitiesDto,
                 entities.getTotalPages(),
-                entities.getTotalElements(),
-                entities.getSize(),
-                entities.getNumber(),
-                entities.isEmpty()
+                entities.getNumber()
         );
     }
 
