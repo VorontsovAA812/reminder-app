@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.reminder.app.REST.DTO.ReminderResponse;
 import ru.reminder.app.exception.BusinessException;
 import ru.reminder.app.model.Reminder;
+import ru.reminder.app.query.SortingOptions;
 import ru.reminder.app.repository.ReminderRepository;
 import org.springframework.data.domain.PageRequest;
 
@@ -60,10 +61,8 @@ public class ReminderService {
         reminderRepository.deleteById(reminder.getId());
     }
 
-
-
-    public PagingResult<ReminderDto> findAll(Integer page, Integer size, Long userId) {
-        final Pageable pageable = PageRequest.of(page-1,size);
+    public PagingResult<ReminderDto> findAll(Integer page, Integer size, Long userId, String sortBy) {
+        final Pageable pageable = PageRequest.of(page-1,size, SortingOptions.valueOf(sortBy.toUpperCase()).getSort());
         final Page<Reminder> entities = reminderRepository.findByUserId(userId,pageable);
         final List<ReminderDto> entitiesDto = entities.stream()
                                 .map(entity ->{
