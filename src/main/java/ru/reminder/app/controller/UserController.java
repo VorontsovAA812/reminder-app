@@ -1,7 +1,7 @@
-package ru.reminder.app.REST;
+package ru.reminder.app.controller;
 
-import ru.reminder.app.REST.DTO.UserDto;
-import ru.reminder.app.model.User;
+import ru.reminder.app.model.dto.UserDto;
+import ru.reminder.app.model.entity.User;
 import ru.reminder.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Long> createUser(@RequestBody UserDto userDto) {
 
-        Long id =userService.createUser(userDto);
+        Long id = userService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(id);
     }

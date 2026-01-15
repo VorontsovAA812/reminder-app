@@ -10,13 +10,11 @@ public enum SortingOptions {
 
     final Sort sort;
 
-    SortingOptions (Sort sort)
-    {
+    SortingOptions(Sort sort) {
         this.sort = sort;
     }
 
-    public Sort getSort()
-    {
+    public Sort getSort() {
         return sort;
     }
 

@@ -1,12 +1,12 @@
-package ru.reminder.app.REST;
+package ru.reminder.app.controller;
 
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.reminder.app.REST.DTO.PagingResult;
-import ru.reminder.app.REST.DTO.ReminderDto;
-import ru.reminder.app.REST.DTO.ReminderResponse;
+import ru.reminder.app.model.dto.PagingResult;
+import ru.reminder.app.model.dto.ReminderDto;
+import ru.reminder.app.model.dto.ReminderResponse;
 import ru.reminder.app.service.ReminderService;
 
 
@@ -46,9 +46,8 @@ public class ReminderController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "2") Integer size,
             @RequestParam(defaultValue = "1") Long userId, // ← ВРЕМЕННО! пока не добавлена ауентификация
-            @RequestParam(defaultValue = "date") String sortBy)
-    {
-        return reminderService.findAll(page,size,userId, sortBy);
+            @RequestParam(defaultValue = "date") String sortBy) {
+        return reminderService.findAll(page, size, userId, sortBy);
     }
 
 }

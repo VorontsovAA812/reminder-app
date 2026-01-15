@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.util.function.Supplier;
+
 @Getter
 public class BusinessException extends RuntimeException {
 
@@ -14,9 +15,8 @@ public class BusinessException extends RuntimeException {
         this.status = status;
     }
 
-  public static  Supplier<BusinessException>  of(HttpStatus status, String message)
-    {
-        return () -> new  BusinessException(status,message);
+    public static Supplier<BusinessException> of(HttpStatus status, String message) {
+        return () -> new BusinessException(status, message);
     }
 
 }

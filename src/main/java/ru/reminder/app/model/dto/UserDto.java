@@ -1,4 +1,4 @@
-package ru.reminder.app.REST.DTO;
+package ru.reminder.app.model.dto;
 
 import lombok.Data;
 

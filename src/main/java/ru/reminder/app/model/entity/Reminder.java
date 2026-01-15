@@ -1,4 +1,4 @@
-package ru.reminder.app.model;
+package ru.reminder.app.model.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -24,12 +24,12 @@ import java.time.LocalDateTime;
 public class Reminder {
 
     public Reminder(String title,
-    String description,LocalDateTime remind)
-    {
+                    String description, LocalDateTime remind) {
         this.title = title;
         this.description = description;
         this.remind = remind;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -51,7 +51,6 @@ public class Reminder {
             foreignKey = @ForeignKey(name = "fk_reminder_user")
     )
     private User user;
-
 
 
 }
