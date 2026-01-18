@@ -46,8 +46,10 @@ public class ReminderController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "2") Integer size,
             @RequestParam(defaultValue = "1") Long userId, // ← ВРЕМЕННО! пока не добавлена ауентификация
-            @RequestParam(defaultValue = "date") String sortBy) {
-        return reminderService.findAll(page, size, userId, sortBy);
+            @RequestParam(defaultValue = "date") String sortBy,
+            @RequestParam(required = false) Boolean today) {
+
+        return reminderService.findAll(page, size, userId, sortBy, today);
     }
 
 }

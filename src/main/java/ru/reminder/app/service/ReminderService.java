@@ -15,6 +15,7 @@ import ru.reminder.app.model.entity.Reminder;
 import ru.reminder.app.query.SortingOptions;
 import ru.reminder.app.repository.ReminderRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,24 +67,43 @@ public class ReminderService {
         reminderRepo.deleteById(reminder.getId());
     }
 
-    public PagingResult<ReminderDto> findAll(Integer page, Integer size, Long userId, String sortBy) {
-        Pageable pageable = PageRequest.of(page - 1, size, SortingOptions.valueOf(sortBy.toUpperCase()).getSort());
-        Page<Reminder> entities = reminderRepo.findByUserId(userId, pageable);
 
-        List<ReminderDto> entitiesDto = entities.stream()
-                .map(entity -> ReminderDto.builder()
-                        .title(entity.getTitle())
-                        .description(entity.getDescription())
-                        .remind(entity.getRemind())
+    public PagingResult<ReminderDto> findAll(Integer pageNum, Integer size, Long userId, String sortBy, Boolean today) {
+        Pageable pageable = PageRequest.of(pageNum - 1, size, SortingOptions.valueOf(sortBy.toUpperCase()).getSort());
+        Page<Reminder> page = toDayFilter(userId, pageable, today);
+
+        return toPagingResult(page, userId);
+
+    }
+
+    private Page<Reminder> toDayFilter(Long userId, Pageable pageable, Boolean today) {
+        if (today != null && today) {
+            LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+            LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
+
+            return reminderRepo.findRemindBetweenDates(userId, startOfDay, endOfDay, pageable);
+
+        }
+        return reminderRepo.findByUserId(userId, pageable);
+    }
+
+    private PagingResult<ReminderDto> toPagingResult(Page<Reminder> page, Long userId) {
+        List<ReminderDto> contentDto = page.stream()
+                .map(reminder -> ReminderDto.builder()
+                        .title(reminder.getTitle())
+                        .description(reminder.getDescription())
+                        .remind(reminder.getRemind())
                         .userId(userId)
                         .build())
                 .collect(Collectors.toList());
 
         return PagingResult.<ReminderDto>builder()
-                .content(entitiesDto)
-                .total(entities.getTotalPages())
-                .current(entities.getNumber() + 1)
+                .content(contentDto)
+                .total(page.getTotalPages())
+                .current(page.getNumber() + 1)
                 .build();
+
+
     }
 
 
