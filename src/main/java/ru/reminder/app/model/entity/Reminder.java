@@ -14,22 +14,18 @@ import jakarta.persistence.ForeignKey;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
 public class Reminder {
-
-    public Reminder(String title,
-                    String description, LocalDateTime remind) {
-        this.title = title;
-        this.description = description;
-        this.remind = remind;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
