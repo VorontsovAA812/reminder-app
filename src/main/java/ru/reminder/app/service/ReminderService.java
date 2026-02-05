@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import ru.reminder.app.exception.BusinessException;
 import ru.reminder.app.model.dto.PagingResult;
 import ru.reminder.app.model.dto.ReminderDto;
-import ru.reminder.app.model.dto.ReminderResponse;
 import ru.reminder.app.model.entity.Reminder;
 import ru.reminder.app.query.SortingOptions;
 import ru.reminder.app.repository.ReminderRepository;
@@ -26,43 +25,31 @@ public class ReminderService {
     private final ReminderRepository reminderRepo;
     private final UserService userService;
 
-    public ReminderResponse createReminder(ReminderDto reminderDto) {
-        Reminder reminder = new Reminder(
-                reminderDto.getTitle(),
-                reminderDto.getDescription(),
-                reminderDto.getRemind()
-        );
-        // Временная заглушка, пока не добавлена аутентификация
-        reminder.setUser(userService.getUserById(reminderDto.getUserId()));
+    public ReminderDto createReminder(ReminderDto reminderDto) {
+        Reminder reminder = Reminder.builder()
+                .title(reminderDto.getTitle())
+                .description(reminderDto.getDescription())
+                .remind(reminderDto.getRemind())
+                .user(userService.getUserById(reminderDto.getUserId()))
+                .build();
 
         Reminder savedReminder = reminderRepo.save(reminder);
 
-        return ReminderResponse.builder()
-                .id(savedReminder.getId())
-                .title(savedReminder.getTitle())
-                .description(savedReminder.getDescription())
-                .remind(savedReminder.getRemind())
-                .userId(savedReminder.getUser().getId())
-                .build();
+        return convertingReminderToDTO(savedReminder);
     }
 
-
-    public ReminderResponse getReminderById(Long id) {
+    public ReminderDto getReminderById(Long id) {
         Reminder reminder = reminderRepo.findById(id)
                 .orElseThrow(BusinessException.of(HttpStatus.NOT_FOUND,
                         "Reminder with id " + id + " not found"));
 
-        return ReminderResponse.builder()
-                .id(reminder.getId())
-                .title(reminder.getTitle())
-                .description(reminder.getDescription())
-                .remind(reminder.getRemind())
-                .userId(reminder.getUser().getId())
-                .build();
+        return convertingReminderToDTO(reminder);
     }
 
     public void deleteById(Long id) {
-        ReminderResponse reminder = getReminderById(id);
+        Reminder reminder = reminderRepo.findById(id)
+                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND,
+                        "Reminder with id " + id + " not found"));
 
         reminderRepo.deleteById(reminder.getId());
     }
@@ -102,8 +89,15 @@ public class ReminderService {
                 .total(page.getTotalPages())
                 .current(page.getNumber() + 1)
                 .build();
+    }
 
-
+    private ReminderDto convertingReminderToDTO(Reminder reminder) {
+        return ReminderDto.builder()
+                .title(reminder.getTitle())
+                .description(reminder.getDescription())
+                .remind(reminder.getRemind())
+                .userId(reminder.getUser().getId())
+                .build();
     }
 
 
