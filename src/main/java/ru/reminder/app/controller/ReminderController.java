@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.reminder.app.model.dto.PagingResult;
 import ru.reminder.app.model.dto.ReminderDto;
-import ru.reminder.app.model.dto.ReminderResponse;
 import ru.reminder.app.service.ReminderService;
 
 
@@ -22,15 +21,15 @@ public class ReminderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ReminderResponse> createReminder(@RequestBody ReminderDto reminderDto) {
+    public ResponseEntity<ReminderDto> createReminder(@RequestBody ReminderDto reminderDto) {
 
-        ReminderResponse reminderResponse = reminderService.createReminder(reminderDto);
+        ReminderDto reminderResponse = reminderService.createReminder(reminderDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reminderResponse);
     }
 
     @GetMapping("/{id}")
-    public ReminderResponse getReminderById(@PathVariable Long id) {
+    public ReminderDto getReminderById(@PathVariable Long id) {
         return reminderService.getReminderById(id);
     }
 
