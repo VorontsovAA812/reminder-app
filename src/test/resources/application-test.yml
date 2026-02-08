@@ -5,9 +5,12 @@ spring:
     username: sa
     password: password
   jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: validate
-    show-sql: true
 
   h2:
     console:
