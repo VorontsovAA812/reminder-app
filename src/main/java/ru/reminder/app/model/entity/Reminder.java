@@ -48,5 +48,7 @@ public class Reminder {
     )
     private User user;
 
+    @Column(name = "notified", nullable = false)
+    private boolean notified = false;
 
 }

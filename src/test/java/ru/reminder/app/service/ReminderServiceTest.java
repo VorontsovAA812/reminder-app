@@ -20,6 +20,7 @@ import ru.reminder.app.query.SortingOptions;
 import ru.reminder.app.repository.ReminderRepository;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,7 @@ class ReminderServiceTest {
                 .id(REMINDER_ID)
                 .title("Заголовок")
                 .description("Описание")
-                .remind(LocalDateTime.now())
+                .remind(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
                 .user(user)
                 .build();
         when(reminderRepo.findById(REMINDER_ID)).thenReturn(Optional.of(reminderEntity));

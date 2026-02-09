@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changeset/create-user-table.sql
   - include:
       file: db/changelog/changeset/create-reminder-table.sql
+  - include:
+      file: db/changelog/changeset/alter-notified-column.sql
+  - include:
+      file: db/changelog/changeset/alter-chatID-column.sql
