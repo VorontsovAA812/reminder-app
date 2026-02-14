@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import ru.reminder.app.model.entity.Reminder;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     Page<Reminder> findByUserId(Long userId, Pageable pageable);
@@ -19,5 +20,7 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
                                      @Param("end") LocalDateTime end,
                                      Pageable pageable);
 
-
+    @Query("SELECT r FROM Reminder r " +
+            "WHERE r.user.id = :userId AND r.remind = :remind")
+    Optional<Reminder> findUserReminder(Long userId, LocalDateTime remind);
 }
