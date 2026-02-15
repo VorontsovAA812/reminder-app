@@ -15,6 +15,7 @@ import ru.reminder.app.query.SortingOptions;
 import ru.reminder.app.repository.ReminderRepository;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class ReminderService {
         Reminder reminder = Reminder.builder()
                 .title(reminderDto.getTitle())
                 .description(reminderDto.getDescription())
-                .remind(reminderDto.getRemind())
+                .remind(reminderDto.getRemind().truncatedTo(ChronoUnit.MINUTES))
                 .user(userService.getUserById(reminderDto.getUserId()))
                 .build();
 

@@ -29,6 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "chat_id", unique = true)
+    private Long chatId;
+
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
