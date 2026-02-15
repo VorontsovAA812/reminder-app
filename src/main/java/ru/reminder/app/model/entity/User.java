@@ -36,4 +36,6 @@ public class User {
         this.userName = userName;
         this.password = password;
     }
+    @Column(length = 30)
+    private String email;
 }

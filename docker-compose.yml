@@ -12,6 +12,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - BOT_NAME=${BOT_NAME}
       - BOT_TOKEN=${BOT_TOKEN}
+      - CRON_EXPRESSION=${CRON_EXPRESSION}
     ports:
       - "8080:8080"
   db:

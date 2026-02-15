@@ -25,7 +25,7 @@ public class ReminderScheduler {
 
     private static final String STRING_FORMAT=  "%s\n%s";
 
-    @Scheduled(cron = "${cron}")
+    @Scheduled(cron = "${bot.cron}")
     @Transactional
     public void sendScheduledReminders() {
 
