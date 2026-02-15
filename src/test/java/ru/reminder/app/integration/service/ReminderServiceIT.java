@@ -46,7 +46,7 @@ public class ReminderServiceIT {
         Reminder reminderEntity = Reminder.builder()
                 .title("Заголовок")
                 .description("Описание")
-                .remind(now().truncatedTo(ChronoUnit.MICROS))
+                .remind(now().truncatedTo(ChronoUnit.MINUTES))
                 .user(user)
                 .build();
         Reminder savedReminder = reminderRepo.save(reminderEntity);
@@ -138,7 +138,7 @@ public class ReminderServiceIT {
                 .title("Купить хлеб")
                 .userId(id)
                 .description("хлеб выбирать свежий")
-                .remind(now().truncatedTo(ChronoUnit.MICROS))
+                .remind(now().truncatedTo(ChronoUnit.MINUTES))
                 .build();
         ReminderDto created = reminderService.createReminder(reminderDto);
         assertNotNull(created);

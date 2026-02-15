@@ -35,7 +35,8 @@ class ReminderServiceTest {
 
     @Mock
     private ReminderRepository reminderRepo;
-
+    @Mock
+    private UserService userService;
     @InjectMocks
     private ReminderService reminderService;
 
@@ -108,25 +109,38 @@ class ReminderServiceTest {
         verify(reminderRepo, never()).deleteById(anyLong());
     }
 
+
     @Test
     void createReminder_shouldSaveEntity_AndReturnResponse() {
+        //  данных
         User user = new User();
         user.setId(USER_ID);
-        Reminder reminder = Reminder.builder()
-                .title("Купить хлеб")
-                .user(user)
-                .build();
-        when(reminderRepo.save(any(Reminder.class))).thenReturn(reminder);
+
+        LocalDateTime testDateTime = LocalDateTime.now().plusDays(1);
+        LocalDateTime expectedDateTime = testDateTime.truncatedTo(ChronoUnit.MINUTES);
+
         ReminderDto reminderDto = ReminderDto.builder()
                 .title("Купить хлеб")
                 .userId(USER_ID)
+                .remind(testDateTime)
                 .build();
 
+        Reminder savedReminder = Reminder.builder()
+                .id(REMINDER_ID)
+                .title("Купить хлеб")
+                .remind(expectedDateTime)
+                .user(user)
+                .build();
+
+        when(reminderRepo.save(any(Reminder.class))).thenReturn(savedReminder);
+
         ReminderDto created = reminderService.createReminder(reminderDto);
+
 
         assertNotNull(created);
         assertEquals(USER_ID, created.getUserId());
         assertEquals("Купить хлеб", created.getTitle());
+        assertEquals(expectedDateTime, created.getRemind(), "Время должно быть обрезано до минут");
         verify(reminderRepo, times(1)).save(any(Reminder.class));
     }
 
