@@ -22,3 +22,5 @@ logging:
 bot:
     name: ${BOT_NAME}
     token: ${BOT_TOKEN}
+
+cron: ${CRON_EXPRESSION}
