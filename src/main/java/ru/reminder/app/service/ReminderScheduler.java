@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.reminder.app.bot.TelegramBot;
+import ru.reminder.app.exception.BusinessException;
 import ru.reminder.app.model.entity.Reminder;
 import ru.reminder.app.repository.ReminderRepository;
 
@@ -21,7 +23,9 @@ public class ReminderScheduler {
     private final ReminderRepository reminderRepo;
     private final TelegramBot telegramBot;
 
-    @Scheduled(cron = "0 * * * * *")
+    private static final String STRING_FORMAT=  "%s\n%s";
+
+    @Scheduled(cron = "${cron}")
     @Transactional
     public void sendScheduledReminders() {
 
@@ -31,15 +35,13 @@ public class ReminderScheduler {
             for (Reminder reminder : dueReminders) {
 
                 try {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("🔔 *").append(reminder.getTitle()).append("*\n\n");
-                    sb.append(reminder.getDescription());
+                    String messageText = String.format(STRING_FORMAT, reminder.getTitle(),reminder.getDescription());
 
-                    telegramBot.sendMessage(reminder.getUser().getChatId(), sb.toString());
+                    telegramBot.sendMessage(reminder.getUser().getChatId(), messageText);
                     reminder.setNotified(true);
                     reminderRepo.save(reminder);
 
-                } catch (Exception e) {
+                } catch (BusinessException e) {
                     log.error("Ошибка при отправке напоминания ID {}: {}", reminder.getId(), e.getMessage());
                 }
 

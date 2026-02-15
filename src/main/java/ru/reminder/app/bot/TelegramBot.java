@@ -1,4 +1,4 @@
-package ru.reminder.app.service;
+package ru.reminder.app.bot;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,11 +8,14 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.reminder.app.bot.command.Command;
 import ru.reminder.app.config.BotConfig;
 import ru.reminder.app.model.entity.User;
 import ru.reminder.app.repository.UserRepository;
 
 import java.util.Optional;
+
+import static ru.reminder.app.bot.command.Command.*;
 
 @Slf4j
 @Component
@@ -21,6 +24,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
     private final UserRepository userRepo;
+
+    private static final String REG_ERROR_TEMPLATE = "Ошибка: Пользователь '%s' не найден";
 
     @Override
     public String getBotUsername() {
@@ -38,25 +43,27 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
-            if (messageText.equals("/start")) {
-                registerUser(update.getMessage().getFrom().getUserName(), chatId);
+            Command command = Command.commandFinder(messageText);
+            switch (command) {
+                case START: {
+                    registerUser(command.getResponse(), update.getMessage().getFrom().getUserName(), chatId);
+                    break;
+                }
+                case UNKNOWN:
+                    sendMessage(chatId, UNKNOWN.getResponse());
             }
-            else {
-                sendMessage(chatId, "Команда не найдена");
-            }
-
         }
     }
 
-    private void registerUser(String username, Long chatId) {
+    private void registerUser(String command,String username, Long chatId) {
         Optional<User> element = userRepo.findByUserName(username);
         if (element.isEmpty()) {
-            sendMessage(chatId, "Ошибка: Пользователь '" + username + "' не найден в системе. \n" + "Пожалуйста, сначала зарегистрируйтесь: https://my-site.com/register");
+            sendMessage(chatId, String.format(REG_ERROR_TEMPLATE,username));
         } else {
             User user = element.get();
             user.setChatId(chatId);
             userRepo.save(user);
-            sendMessage(chatId, " Успешно! Аккаунт '" + username + "' привязан к этому чату. " + "Теперь вы будете получать уведомления здесь.");
+            sendMessage(chatId, command);
         }
     }
 
@@ -71,7 +78,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 log.error("Error occurred {}", e.getMessage());
 
             }
-
         }
     }
 
