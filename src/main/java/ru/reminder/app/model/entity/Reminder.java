@@ -40,7 +40,7 @@ public class Reminder {
     @Column
     private LocalDateTime remind;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
             name = "user_id",
             nullable = false,
