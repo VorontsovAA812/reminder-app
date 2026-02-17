@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changeset/alter-notified-column.sql
   - include:
       file: db/changelog/changeset/alter-chatID-column.sql
+  - include:
+      file: db/changelog/changeset/alter-email-column.sql

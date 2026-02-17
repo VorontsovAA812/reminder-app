@@ -15,6 +15,20 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: validate
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: ${EMAIL_SENDER}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            socketFactory:
+              port: 465
+              class: javax.net.ssl.SSLSocketFactory
 
 logging:
   level:
@@ -22,5 +36,4 @@ logging:
 bot:
     name: ${BOT_NAME}
     token: ${BOT_TOKEN}
-
-cron: ${CRON_EXPRESSION}
+    cron: ${CRON_EXPRESSION}

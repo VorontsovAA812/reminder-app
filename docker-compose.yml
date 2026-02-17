@@ -12,8 +12,13 @@ services:
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - BOT_NAME=${BOT_NAME}
       - BOT_TOKEN=${BOT_TOKEN}
+      - CRON_EXPRESSION=${CRON_EXPRESSION}
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - EMAIL_SENDER=${EMAIL_SENDER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
     ports:
       - "8080:8080"
+      - "5005:5005"
   db:
     image: postgres:17.0
     container_name: psql-db
