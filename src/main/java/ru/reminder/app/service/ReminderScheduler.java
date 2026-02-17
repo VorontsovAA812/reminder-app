@@ -10,6 +10,7 @@ import ru.reminder.app.model.entity.Reminder;
 import ru.reminder.app.repository.ReminderRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class ReminderScheduler {
     @Scheduled(cron = "${bot.cron}")
     public void sendScheduledReminders() {
 
-        List<Reminder> dueReminders = reminderRepo.findUnnotifiedReminders(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plusHours(3));
+        List<Reminder> dueReminders = reminderRepo.findUnnotifiedReminders(ZonedDateTime.now().toLocalDateTime());
 
         if (!dueReminders.isEmpty()) {
             for (Reminder reminder : dueReminders) {
